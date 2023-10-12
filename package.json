@@ -9,6 +9,9 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@arcgis/core": "^4.27.6",
+		"@esri/calcite-components": "^1.9.1",
+		"@esri/calcite-components-react": "^1.9.1",
 		"@types/node": "20.6.3",
 		"@types/react": "18.2.22",
 		"@types/react-dom": "18.2.7",

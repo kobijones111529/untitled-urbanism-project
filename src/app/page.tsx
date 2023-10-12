@@ -1,3 +1,9 @@
+import EsriMap from "@/components/EsriMap";
+
 export default function Home() {
-	return <h1>Hello</h1>;
+	return (
+		<main>
+			<EsriMap />
+		</main>
+	);
 }

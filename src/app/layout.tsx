@@ -1,6 +1,10 @@
-import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { setAssetPath } from "@esri/calcite-components/dist/components";
+import "@esri/calcite-components/dist/calcite/calcite.css";
+import "./globals.css";
+
+setAssetPath("https://unpkg.com/@esri/calcite-components/dist/calcite/assets");
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,6 +20,13 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
+			<head>
+				<link
+					rel="stylesheet"
+					type="text/css"
+					href="https://js.arcgis.com/4.27/esri/themes/dark/main.css"
+				/>
+			</head>
 			<body className={inter.className}>{children}</body>
 		</html>
 	);
