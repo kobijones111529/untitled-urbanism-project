@@ -27,7 +27,7 @@ export default function RootLayout({
 					href="https://js.arcgis.com/4.27/esri/themes/dark/main.css"
 				/>
 			</head>
-			<body className={inter.className}>{children}</body>
+			<body className={`h-screen ${inter.className}`}>{children}</body>
 		</html>
 	);
 }

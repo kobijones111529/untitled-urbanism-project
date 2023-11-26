@@ -40,7 +40,13 @@ setAssetPath("https://unpkg.com/@esri/calcite-components/dist/calcite/assets");
 
 const apiKey = getArcGisApiKey();
 
-export default function EsriMap() {
+export default function EsriMap(props: {
+	center: { latitude: number; longitude: number };
+	dataUrl: string;
+	valueField: string;
+	areaField: string;
+	areaPerAcre: number;
+}) {
 	const mapRef = useRef<HTMLDivElement>(null);
 	const widgetRef = useRef<HTMLDivElement>(null);
 
@@ -52,8 +58,8 @@ export default function EsriMap() {
 		const visualVariables = [
 			new ColorVariable({
 				valueExpression: `
-					var value = $feature.TaxableMarketValue;
-					var acreage = $feature.ACREAGE;
+					var value = $feature.${props.valueField};
+					var acreage = $feature.${props.areaField} / ${props.areaPerAcre};
 					if (value > 0 && acreage > 0) {
 						return value / acreage;
 					} else {
@@ -111,8 +117,8 @@ export default function EsriMap() {
 				},
 			}),
 			valueExpression: `
-				var value = $feature.TaxableMarketValue;
-				var acreage = $feature.ACREAGE;
+				var value = $feature.${props.valueField};
+				var acreage = $feature.${props.areaField} / ${props.areaPerAcre};
 				if (value > 0 && acreage > 0) {
 					return value / acreage;
 				} else {
@@ -126,8 +132,8 @@ export default function EsriMap() {
 			visualVariables: [
 				new ColorVariable({
 					valueExpression: `
-						var value = $feature.TaxableMarketValue;
-						var acreage = $feature.ACREAGE;
+						var value = $feature.${props.valueField};
+						var acreage = $feature.${props.areaField} / ${props.areaPerAcre};
 						if (value > 0 && acreage > 0) {
 							return value / acreage;
 						} else {
@@ -183,8 +189,11 @@ export default function EsriMap() {
 			...labelOptions,
 			labelExpressionInfo: {
 				expression: `
-					if ($feature.TaxableMarketValue > 0) {
-						Text($feature.TaxableMarketValue, "$#,###");
+					var value = $feature.${props.valueField};
+					if (value > 0) {
+						return Text(value, "$#,###");
+					} else {
+						return null;
 					}
 				`,
 			},
@@ -197,7 +206,7 @@ export default function EsriMap() {
 			...labelOptions,
 			labelExpressionInfo: {
 				expression: `
-					var acreage = $feature.ACREAGE;
+					var acreage = $feature.${props.areaField} / ${props.areaPerAcre};
 					if (acreage > 0) {
 						return Text(acreage, "#,###.## acres");
 					} else {
@@ -214,8 +223,8 @@ export default function EsriMap() {
 			...labelOptions,
 			labelExpressionInfo: {
 				expression: `
-					var value = $feature.TaxableMarketValue;
-					var acreage = $feature.ACREAGE;
+					var value = $feature.${props.valueField};
+					var acreage = $feature.${props.areaField} / ${props.areaPerAcre};
 					if (value > 0 && acreage > 0) {
 						return Text(value / acreage, "$#,### / acre");
 					} else {
@@ -229,8 +238,7 @@ export default function EsriMap() {
 			}),
 		});
 
-		const dataUrl =
-			"https://gis.stlouiscountymn.gov/server2/rest/services/GeneralUse/OpenData/MapServer/7";
+		const dataUrl = props.dataUrl;
 		const featureLayer = new FeatureLayer({
 			url: dataUrl,
 			renderer: classBreaksRenderer,
@@ -269,7 +277,7 @@ export default function EsriMap() {
 			map,
 			zoom: 13,
 			container: mapRef.current || undefined,
-			center: [-92.1005, 46.7867],
+			center: [props.center.longitude, props.center.latitude],
 			constraints: {
 				rotationEnabled: true,
 			},
@@ -461,14 +469,17 @@ export default function EsriMap() {
 		return () => {
 			view.destroy();
 		};
-	}, [mapRef, widgetRef]);
+	}, [props, mapRef, widgetRef]);
 
 	return (
 		<>
 			<div className="h-screen" ref={mapRef}></div>
 			<div ref={widgetRef} className="esri-component esri-sketch esri-widget">
 				<div className="esri-sketch__panel" role="toolbar">
-					<div className="esri-sketch__section esri-sketch__tool-section" role="menu">
+					<div
+						className="esri-sketch__section esri-sketch__tool-section"
+						role="menu"
+					>
 						<CalciteAction title="Draw" text="" appearance="solid" scale="s">
 							<CalciteIcon icon="pencil" />
 						</CalciteAction>
