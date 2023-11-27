@@ -12,6 +12,7 @@
 		"@arcgis/core": "^4.27.6",
 		"@esri/calcite-components": "^1.9.1",
 		"@esri/calcite-components-react": "^1.9.1",
+		"@prisma/client": "^5.6.0",
 		"@tanstack/react-query": "^4.36.1",
 		"@trpc/client": "^10.40.0",
 		"@trpc/react-query": "^10.40.0",
@@ -32,6 +33,10 @@
 	},
 	"devDependencies": {
 		"prettier": "3.0.3",
-		"prisma": "^5.3.1"
+		"prisma": "^5.6.0",
+		"ts-node": "^10.9.1"
+	},
+	"prisma": {
+		"seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
 	}
 }

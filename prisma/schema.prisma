@@ -6,3 +6,15 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Map {
+  id          Int     @id @default(autoincrement())
+  latitude    Decimal @db.Decimal(6, 4)
+  longitude   Decimal @db.Decimal(7, 4)
+  state       String
+  county      String
+  dataUrl     String
+  valueField  String
+  areaField   String
+  areaPerAcre Decimal @default(1)
+}
